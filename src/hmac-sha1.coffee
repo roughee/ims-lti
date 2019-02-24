@@ -67,14 +67,14 @@ class HMAC_SHA1
     if protocol is undefined
       encrypted = req.connection.encrypted
       protocol = (encrypted and 'https') or 'http'
-    
+
     parsedUrl  = url.parse originalUrl, true
     hitUrl     = protocol + '://' + req.headers.host + parsedUrl.pathname
 
     @build_signature_raw hitUrl, parsedUrl, req.method, body, consumer_secret, token
 
   sign_string: (str, key, token) ->
-    key = "#{key}&"
+    key = "#{utils.special_encode(key)}&"
     key += token if token
 
     crypto.createHmac('sha1', key).update(str).digest('base64')
